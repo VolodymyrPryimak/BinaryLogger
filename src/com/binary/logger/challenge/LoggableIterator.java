@@ -34,6 +34,11 @@ public class LoggableIterator<T> implements Iterator<T>, Closeable {
             nextVal = (T) ois.readObject();
             return true;
         } catch (Exception e) {
+            try {
+                close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
             return false;
         }
     }
