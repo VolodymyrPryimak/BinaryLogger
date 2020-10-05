@@ -58,19 +58,7 @@ public class BinaryLoggerImpl<T extends BinaryLoggable> implements BinaryLogger<
      */
     @Override
     public Iterator<T> read(File file, Class<T> clazz) throws IOException {
-        LinkedList<T> result = new LinkedList();
-        try (FileInputStream bais = new FileInputStream(file);
-             ObjectInputStream ois = new ObjectInputStream(bais)) {
-            Object obj;
-            while ((obj = ois.readObject()) != null) {// It could be converted into while(true) and wait EOFException
-                result.add((T)obj);
-            }
-        } catch (ClassNotFoundException ex){
-            ex.printStackTrace();
-        } catch (EOFException ex){
-            // Shaking my head.
-        }
-        return result.iterator();
+        return new LoggableIterator<T>(file);
     }
 
     /**
